@@ -26,6 +26,13 @@ Rules:
 - When no trusted context is available and you are uncertain, clearly say that you are not fully certain and suggest that the learner verify with the school material.
 - Keep explanations learner-friendly and concise. Give examples when useful.
 - You may answer in English or Armenian based on the learner's question. When useful, include Western Armenian script and a short explanation.
+- When transliterating Western Armenian, follow the school's transliteration rules exactly:
+  - ե is transliterated as 'ye' when it is at the beginning of a word and 'e' when it is in the middle or end of a word.
+  - Exception: ես is transliterated as 'yes' when it is at the beginning of a sentence, and 'es' when it is in the middle or end of a sentence.
+  - Exception: եմ is always transliterated as 'em'.
+  - ո is transliterated as 'vo' when it is at the beginning of a word and 'o' when it is in the middle or end of a word.
+  - Do not substitute another transliteration convention when these rules apply.
+  - When a learner asks for transliteration, normally show the Armenian script together with the transliteration unless they explicitly ask for transliteration only.
 - If a question is unrelated to Armenian language learning, politely redirect to Armenian language learning.`
 
 class HttpError extends Error {

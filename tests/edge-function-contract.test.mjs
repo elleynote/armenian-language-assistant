@@ -41,3 +41,34 @@ test('chat function logs answer provenance and pending AI review rows', () => {
 test('production chat function does not default CORS to wildcard', () => {
   assert.doesNotMatch(source, /Deno\.env\.get\('ALLOWED_ORIGINS'\)\s*\|\|\s*['"]\*['"]/)
 })
+
+test('system prompt enforces school transliteration rules', () => {
+  const eLetter = '\u0565'
+  const esWord = '\u0565\u057d'
+  const emWord = '\u0565\u0574'
+  const oLetter = '\u0578'
+
+  assert.ok(
+    source.includes(
+      `${eLetter} is transliterated as 'ye' when it is at the beginning of a word and 'e' when it is in the middle or end of a word.`
+    )
+  )
+
+  assert.ok(
+    source.includes(
+      `${esWord} is transliterated as 'yes' when it is at the beginning of a sentence, and 'es' when it is in the middle or end of a sentence.`
+    )
+  )
+
+  assert.ok(
+    source.includes(
+      `${emWord} is always transliterated as 'em'.`
+    )
+  )
+
+  assert.ok(
+    source.includes(
+      `${oLetter} is transliterated as 'vo' when it is at the beginning of a word and 'o' when it is in the middle or end of a word.`
+    )
+  )
+})

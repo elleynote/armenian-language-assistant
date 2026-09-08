@@ -1,0 +1,63 @@
+<!-- Tun Armenian Language Assistant: paste this complete block into one WordPress/Elementor HTML widget. -->
+<div id="tun-armenian-assistant">
+  <div class="taa-shell">
+    <p class="taa-config-warning taa-hidden" data-taa-config-warning>
+      Setup required: replace YOUR_PROJECT_REF in TunArmenianAssistantConfig.apiUrl with your Supabase project reference.
+    </p>
+
+    <header class="taa-header">
+      <div>
+        <p class="taa-eyebrow">Online Armenian School</p>
+        <h2 class="taa-title" data-taa-title>Western Armenian Language Assistant</h2>
+        <p class="taa-intro" data-taa-intro>Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.</p>
+      </div>
+      <button class="taa-reset" type="button" data-taa-reset aria-label="Start a new conversation">New chat</button>
+    </header>
+
+    <main class="taa-messages" data-taa-messages role="log" aria-live="polite" aria-label="Conversation">
+      <div class="taa-message taa-message--assistant">
+        <div class="taa-bubble">Բարեւ։ Ask me a question about Western Armenian.</div>
+      </div>
+    </main>
+
+    <form class="taa-composer" data-taa-form>
+      <div class="taa-input-wrap">
+        <textarea
+          class="taa-input"
+          data-taa-input
+          rows="2"
+          maxlength="2000"
+          placeholder="Ask a Western Armenian question..."
+          aria-label="Your question"
+          required
+        ></textarea>
+        <button class="taa-keyboard-toggle" type="button" data-taa-keyboard-toggle aria-expanded="false">Հայ keyboard</button>
+        <button class="taa-send" type="submit" data-taa-send>Send</button>
+      </div>
+      <div class="taa-keyboard taa-hidden" data-taa-keyboard aria-label="Armenian keyboard"></div>
+      <div class="taa-toolbar">
+        <p class="taa-hint">Press Enter to send · Shift + Enter for a new line</p>
+        <p class="taa-status" data-taa-status aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+/*__TAA_STYLES__*/
+</style>
+
+<script>
+window.TunArmenianAssistantConfig = Object.assign({
+  apiUrl: 'https://YOUR_PROJECT_REF.supabase.co/functions/v1/armenian-chat',
+  title: 'Western Armenian Language Assistant',
+  intro: 'Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.',
+  accent: '#7f2d3f'
+}, window.TunArmenianAssistantConfig || {});
+</script>
+
+<script type="module">
+/*__TAA_CORE__*/
+
+/*__TAA_APP__*/
+</script>

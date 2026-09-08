@@ -1,0 +1,7 @@
+project_id = "armenian-language-assistant"
+
+[functions.armenian-chat]
+verify_jwt = false
+
+[functions.embed-knowledge]
+verify_jwt = false

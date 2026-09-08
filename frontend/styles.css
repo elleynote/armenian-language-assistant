@@ -1,0 +1,262 @@
+#tun-armenian-assistant {
+  --taa-accent: #7f2d3f;
+  --taa-accent-dark: #642031;
+  --taa-bg: #fffaf7;
+  --taa-surface: #ffffff;
+  --taa-text: #241a1d;
+  --taa-muted: #74676b;
+  --taa-line: #eadfe2;
+  --taa-user: #7f2d3f;
+  --taa-assistant: #f5edef;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  color: var(--taa-text);
+  font-family: inherit;
+}
+
+#tun-armenian-assistant * { box-sizing: border-box; }
+
+#tun-armenian-assistant .taa-shell {
+  overflow: hidden;
+  border: 1px solid var(--taa-line);
+  border-radius: 24px;
+  background: var(--taa-surface);
+  box-shadow: 0 18px 55px rgba(55, 31, 38, 0.08);
+}
+
+#tun-armenian-assistant .taa-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 30px 22px;
+  border-bottom: 1px solid var(--taa-line);
+  background: linear-gradient(135deg, var(--taa-bg), #fff);
+}
+
+#tun-armenian-assistant .taa-eyebrow {
+  margin: 0 0 6px;
+  color: var(--taa-accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+#tun-armenian-assistant .taa-title {
+  margin: 0;
+  font-size: clamp(24px, 3vw, 34px);
+  line-height: 1.15;
+}
+
+#tun-armenian-assistant .taa-intro {
+  max-width: 680px;
+  margin: 8px 0 0;
+  color: var(--taa-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+#tun-armenian-assistant .taa-reset {
+  flex: 0 0 auto;
+  padding: 9px 13px;
+  border: 1px solid var(--taa-line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--taa-text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#tun-armenian-assistant .taa-reset:hover { border-color: var(--taa-accent); }
+
+#tun-armenian-assistant .taa-messages {
+  min-height: 360px;
+  max-height: 560px;
+  overflow-y: auto;
+  padding: 28px 30px;
+  background: #fff;
+  scroll-behavior: smooth;
+}
+
+#tun-armenian-assistant .taa-message {
+  display: flex;
+  margin: 0 0 18px;
+}
+
+#tun-armenian-assistant .taa-message--user { justify-content: flex-end; }
+
+#tun-armenian-assistant .taa-bubble {
+  max-width: min(78%, 720px);
+  padding: 13px 16px;
+  border-radius: 18px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.58;
+  font-size: 15px;
+}
+
+#tun-armenian-assistant .taa-message--assistant .taa-bubble {
+  border: 1px solid var(--taa-line);
+  border-bottom-left-radius: 6px;
+  background: var(--taa-assistant);
+}
+
+#tun-armenian-assistant .taa-message--user .taa-bubble {
+  border-bottom-right-radius: 6px;
+  background: var(--taa-user);
+  color: #fff;
+}
+
+#tun-armenian-assistant .taa-source {
+  display: block;
+  margin-top: 7px;
+  color: var(--taa-muted);
+  font-size: 11px;
+}
+
+#tun-armenian-assistant .taa-composer {
+  padding: 20px 22px 22px;
+  border-top: 1px solid var(--taa-line);
+  background: var(--taa-bg);
+}
+
+#tun-armenian-assistant .taa-input-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid var(--taa-line);
+  border-radius: 17px;
+  background: #fff;
+}
+
+#tun-armenian-assistant .taa-input {
+  width: 100%;
+  min-height: 48px;
+  max-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--taa-text);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+#tun-armenian-assistant .taa-send,
+#tun-armenian-assistant .taa-keyboard-toggle {
+  min-height: 44px;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+#tun-armenian-assistant .taa-send {
+  border: 1px solid var(--taa-accent);
+  background: var(--taa-accent);
+  color: #fff;
+}
+
+#tun-armenian-assistant .taa-send:hover { background: var(--taa-accent-dark); }
+
+#tun-armenian-assistant .taa-keyboard-toggle {
+  border: 1px solid var(--taa-line);
+  background: #fff;
+  color: var(--taa-text);
+}
+
+#tun-armenian-assistant button:disabled,
+#tun-armenian-assistant textarea:disabled {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+#tun-armenian-assistant .taa-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+#tun-armenian-assistant .taa-hint {
+  margin: 0;
+  color: var(--taa-muted);
+  font-size: 12px;
+}
+
+#tun-armenian-assistant .taa-keyboard {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--taa-line);
+  border-radius: 15px;
+  background: #fff;
+}
+
+#tun-armenian-assistant .taa-key {
+  min-height: 39px;
+  border: 1px solid var(--taa-line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--taa-text);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+#tun-armenian-assistant .taa-key:hover {
+  border-color: var(--taa-accent);
+  color: var(--taa-accent);
+}
+
+#tun-armenian-assistant .taa-status {
+  margin: 10px 0 0;
+  color: var(--taa-muted);
+  font-size: 12px;
+}
+
+#tun-armenian-assistant .taa-config-warning {
+  margin: 0;
+  padding: 13px 16px;
+  border-bottom: 1px solid #f2d2a9;
+  background: #fff6e8;
+  color: #7b4c0b;
+  font-size: 13px;
+}
+
+#tun-armenian-assistant .taa-hidden { display: none !important; }
+
+#tun-armenian-assistant :focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--taa-accent) 25%, transparent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 680px) {
+  #tun-armenian-assistant .taa-shell { border-radius: 18px; }
+  #tun-armenian-assistant .taa-header {
+    flex-direction: column;
+    padding: 22px 18px 18px;
+  }
+  #tun-armenian-assistant .taa-messages {
+    min-height: 320px;
+    padding: 22px 16px;
+  }
+  #tun-armenian-assistant .taa-bubble { max-width: 90%; }
+  #tun-armenian-assistant .taa-composer { padding: 16px; }
+  #tun-armenian-assistant .taa-input-wrap { flex-wrap: wrap; }
+  #tun-armenian-assistant .taa-input { flex-basis: 100%; }
+  #tun-armenian-assistant .taa-keyboard-toggle,
+  #tun-armenian-assistant .taa-send { flex: 1; }
+  #tun-armenian-assistant .taa-toolbar { align-items: flex-start; flex-direction: column; }
+  #tun-armenian-assistant .taa-keyboard { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+}

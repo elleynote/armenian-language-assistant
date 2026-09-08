@@ -62,6 +62,7 @@
   width: 100%;
   max-width: 1120px;
   margin: 0 auto;
+  padding-top: 16px;
   color: var(--taa-text);
   font-family: inherit;
 }
@@ -95,7 +96,7 @@
 
 #tun-armenian-assistant .taa-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 18px;
   padding: 20px 24px 16px;
@@ -128,20 +129,28 @@
 
 #tun-armenian-assistant .taa-reset {
   flex: 0 0 auto;
-  min-height: 42px;
-  padding: 10px 14px;
-  border: 1px solid var(--taa-line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--taa-accent);
   border-radius: 12px;
   background: #fff;
-  color: var(--taa-text);
+  color: var(--taa-accent);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 650;
+  line-height: 1;
   cursor: pointer;
   white-space: nowrap;
 }
 
 #tun-armenian-assistant .taa-reset:hover {
   border-color: var(--taa-accent);
+  background: var(--taa-accent);
+  color: #fff;
 }
 
 #tun-armenian-assistant .taa-messages {
@@ -401,8 +410,24 @@
   }
 
   #tun-armenian-assistant .taa-reset {
-    width: 100%;
-  }
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--taa-accent);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--taa-accent);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
 
   #tun-armenian-assistant .taa-title {
     font-size: 28px;

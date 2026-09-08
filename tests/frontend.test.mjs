@@ -80,3 +80,15 @@ test('WordPress embed is self-contained and contains no secret keys', async () =
   assert.doesNotMatch(html, /<script[^>]+src=/i)
   assert.doesNotMatch(html, /<link[^>]+stylesheet/i)
 })
+
+test('chatbot has top breathing space above the card', async () => {
+  const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
+  assert.match(css, /padding-top:\s*16px;/)
+})
+
+test('header centers and styles the new chat action', async () => {
+  const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
+  assert.match(css, /\.taa-header\s*\{[\s\S]*?align-items:\s*center;/)
+  assert.match(css, /\.taa-reset\s*\{[\s\S]*?display:\s*inline-flex;/)
+  assert.match(css, /\.taa-reset\s*\{[\s\S]*?min-width:\s*110px;/)
+})

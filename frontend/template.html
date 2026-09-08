@@ -1,4 +1,4 @@
-<!-- Tun Armenian Language Assistant: paste this complete block into one WordPress/Elementor HTML widget. -->
+﻿<!-- Tun Armenian Language Assistant: paste this complete block into one WordPress/Elementor/WPBakery HTML widget. -->
 <div id="tun-armenian-assistant">
   <div class="taa-shell">
     <p class="taa-config-warning taa-hidden" data-taa-config-warning>
@@ -25,16 +25,21 @@
         <textarea
           class="taa-input"
           data-taa-input
-          rows="2"
+          rows="3"
           maxlength="2000"
           placeholder="Ask a Western Armenian question..."
           aria-label="Your question"
           required
         ></textarea>
-        <button class="taa-keyboard-toggle" type="button" data-taa-keyboard-toggle aria-expanded="false">Հայ keyboard</button>
+      </div>
+
+      <div class="taa-actions">
+        <button class="taa-keyboard-toggle" type="button" data-taa-keyboard-toggle aria-expanded="false">Հայերեն keyboard</button>
         <button class="taa-send" type="submit" data-taa-send>Send</button>
       </div>
+
       <div class="taa-keyboard taa-hidden" data-taa-keyboard aria-label="Armenian keyboard"></div>
+
       <div class="taa-toolbar">
         <p class="taa-hint">Press Enter to send · Shift + Enter for a new line</p>
         <p class="taa-status" data-taa-status aria-live="polite"></p>

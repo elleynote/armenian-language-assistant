@@ -92,3 +92,9 @@ test('header centers and styles the new chat action', async () => {
   assert.match(css, /\.taa-reset\s*\{[\s\S]*?display:\s*inline-flex;/)
   assert.match(css, /\.taa-reset\s*\{[\s\S]*?min-width:\s*110px;/)
 })
+
+test('frontend does not expose answer source labels to visitors', async () => {
+  const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
+  assert.doesNotMatch(app, /Source:\s*(approved knowledge|AI)/)
+  assert.doesNotMatch(app, /humanSourceLabel/)
+})

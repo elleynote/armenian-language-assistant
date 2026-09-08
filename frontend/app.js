@@ -56,18 +56,6 @@ if (root) {
   function scrollToBottom() {
     messages.scrollTop = messages.scrollHeight
   }
-
-  function humanSourceLabel(source) {
-    switch (source) {
-      case 'database':
-        return 'Source: approved knowledge'
-      case 'ai_with_context':
-        return 'Source: AI + approved knowledge'
-      case 'ai_fallback':
-        return 'Source: AI response'
-      default:
-        return ''
-    }
   }
 
   function createMessage(role, text, source = '') {
@@ -77,14 +65,6 @@ if (root) {
     const bubble = document.createElement('div')
     bubble.className = 'taa-bubble'
     bubble.innerHTML = escapeHtml(text)
-
-    const label = humanSourceLabel(source)
-    if (role === 'assistant' && label) {
-      const sourceNode = document.createElement('small')
-      sourceNode.className = 'taa-source'
-      sourceNode.textContent = label
-      bubble.appendChild(sourceNode)
-    }
 
     wrapper.appendChild(bubble)
     messages.appendChild(wrapper)
@@ -233,3 +213,4 @@ if (root) {
   renderKeyboard()
   setStatus('')
 }
+

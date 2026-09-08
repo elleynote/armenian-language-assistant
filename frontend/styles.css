@@ -141,13 +141,6 @@
   color: #fff;
 }
 
-#tun-armenian-assistant .taa-source {
-  display: block;
-  margin-top: 6px;
-  color: var(--taa-muted);
-  font-size: 11px;
-}
-
 #tun-armenian-assistant .taa-composer {
   padding: 16px 20px 18px;
   border-top: 1px solid var(--taa-line);
@@ -427,4 +420,5 @@
     flex-direction: column;
   }
 }
+
 

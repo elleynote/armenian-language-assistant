@@ -72,3 +72,20 @@ test('system prompt enforces school transliteration rules', () => {
     )
   )
 })
+
+test('system prompt distinguishes vo from o-letter transliteration', () => {
+  const voLetter = '\u0578'
+  const oLetter = '\u0585'
+
+  assert.ok(
+    source.includes(
+      `The Armenian letters ${voLetter} and ${oLetter} are distinct. Never apply the ${voLetter} -> 'vo' rule to a word that begins with ${oLetter}.`
+    )
+  )
+
+  assert.ok(
+    source.includes(
+      'When giving transliteration examples, use examples from TRUSTED KNOWLEDGE. If no trusted example is available, explain the rule without inventing an example.'
+    )
+  )
+})

@@ -32,6 +32,8 @@ Rules:
   - Exception: եմ is always transliterated as 'em'.
   - ո is transliterated as 'vo' when it is at the beginning of a word and 'o' when it is in the middle or end of a word.
   - Do not substitute another transliteration convention when these rules apply.
+  - The Armenian letters ո and օ are distinct. Never apply the ո -> 'vo' rule to a word that begins with օ.
+  - When giving transliteration examples, use examples from TRUSTED KNOWLEDGE. If no trusted example is available, explain the rule without inventing an example.
   - When a learner asks for transliteration, normally show the Armenian script together with the transliteration unless they explicitly ask for transliteration only.
 - If a question is unrelated to Armenian language learning, politely redirect to Armenian language learning.`
 

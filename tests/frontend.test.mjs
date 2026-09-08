@@ -98,3 +98,24 @@ test('frontend does not expose answer source labels to visitors', async () => {
   assert.doesNotMatch(app, /Source:\s*(approved knowledge|AI)/)
   assert.doesNotMatch(app, /humanSourceLabel/)
 })
+
+test('frontend app has valid JavaScript syntax', async () => {
+  const { spawnSync } = await import('node:child_process')
+  const { fileURLToPath } = await import('node:url')
+
+  const appPath = fileURLToPath(
+    new URL('../frontend/app.js', import.meta.url)
+  )
+
+  const result = spawnSync(
+    process.execPath,
+    ['--check', appPath],
+    { encoding: 'utf8' }
+  )
+
+  assert.equal(
+    result.status,
+    0,
+    result.stderr || result.stdout
+  )
+})

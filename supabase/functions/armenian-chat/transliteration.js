@@ -57,11 +57,12 @@ function preserveCase(source, latin) {
 }
 
 function endsSentence(value) {
-  return /[.!?\u055C\u055E\u0589\n\r]/u.test(value)
+  return /[.!?\u055C\u0589\n\r]/u.test(value)
 }
 
 export function transliterateWesternArmenian(value) {
   const input = Array.from(String(value ?? '').normalize('NFC'))
+  const hasArmenianQuestionMark = input.includes('\u055E')
   let output = ''
   let previousWasArmenian = false
   let atSentenceStart = true
@@ -113,6 +114,22 @@ export function transliterateWesternArmenian(value) {
       continue
     }
 
+    if (current === '\u055E') {
+      continue
+    }
+
+    if (current === '’' || current === "'") {
+      output += "'"
+      continue
+    }
+
+    if (current === '\u0589') {
+      output += hasArmenianQuestionMark ? '?' : '.'
+      previousWasArmenian = false
+      atSentenceStart = true
+      continue
+    }
+
     if (!isArmenianLetter(current)) {
       output += current
       previousWasArmenian = false
@@ -148,7 +165,8 @@ function isTranslationRequest(question) {
 }
 
 function armenianPhrases(value) {
-  const matches = String(value ?? '').match(/[\u0531-\u058F]+(?:[ \t]+[\u0531-\u058F]+)*/gu) ?? []
+  const armenianToken = '[\\u0531-\\u0556\\u0561-\\u0587\\u055E\\u0589’\\\']+'
+  const matches = String(value ?? '').match(new RegExp(`${armenianToken}(?:[ \\t]+${armenianToken})*`, 'gu')) ?? []
   return [...new Set(matches.map((item) => item.trim()).filter(Boolean))].slice(0, 4)
 }
 

@@ -10,10 +10,11 @@ export const ARMENIAN_KEYS = Object.freeze([
   'տ', 'ր', 'ց', 'ւ', 'փ', 'ք', 'և', 'օ', 'ֆ',
 ])
 
-export function buildChatPayload({ message, clientId, sessionId } = {}) {
+export function buildChatPayload({ message, clientId, sessionId, language = 'hyw' } = {}) {
   const payload = {
     message: String(message ?? '').trim(),
     clientId: String(clientId ?? '').trim(),
+    language: language === 'hye' ? 'hye' : 'hyw',
   }
   const cleanSessionId = String(sessionId ?? '').trim()
   if (cleanSessionId) payload.sessionId = cleanSessionId

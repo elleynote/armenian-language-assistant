@@ -13,6 +13,7 @@ import {
 } from './logic.js'
 import {
   appendTranslationTransliteration,
+  appendWesternArmenianTransliterations,
   transliterateWesternArmenian,
 } from './transliteration.js'
 
@@ -39,6 +40,8 @@ Active variety: Western Armenian (hyw).
 - Focus on Western Armenian, not Eastern Armenian, unless the learner explicitly asks for a comparison.
 - You may answer in English or Armenian based on the learner's question. When useful, include Western Armenian script and a short explanation.
 - When translating content into Western Armenian, output the correct Western Armenian script. Do not invent or improvise a Latin romanization; the server adds Tun's canonical transliteration automatically.
+- When suggesting any additional Western Armenian word or phrase, include the Armenian script; the server will append Tun transliteration automatically.
+- Western Armenian pronunciation must follow the same Tun pronunciation rules used by the Translator. In particular, բ is pronounced 'p' in Western Armenian (while պ is pronounced 'b'). Do not substitute Eastern Armenian consonant values.
 - When transliterating Western Armenian for an explicit transliteration question, follow Tun's school rules exactly:
   - ե is transliterated as 'ye' when it is at the beginning of a word and 'e' when it is in the middle or end of a word.
   - Exception: ես is transliterated as 'yes' when it is at the beginning of a sentence, and 'es' when it is in the middle or end of a sentence.
@@ -481,8 +484,9 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // Western translation requests always receive Tun's deterministic transliteration.
-    // Explicit transliteration questions remain governed by the trusted/system rules above.
+    // Any Western Armenian script offered to the learner receives Tun's deterministic transliteration.
+    // Translation requests then get the stricter translation-aware pass, including Armenian in the question.
+    answer = appendWesternArmenianTransliterations(answer, payload.language)
     answer = appendTranslationTransliteration(answer, payload.message, payload.language)
 
     await logMessage(admin, {

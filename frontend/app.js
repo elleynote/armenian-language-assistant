@@ -13,7 +13,7 @@ if (root) {
   const languageSelect = root.querySelector('[data-taa-language]')
   const configWarning = root.querySelector('[data-taa-config-warning]')
 
-  root.style.setProperty('--taa-accent', config.accent || '#DB182B')
+  root.style.setProperty('--taa-accent', config.accent || '#A6D7EB')
 
   function syncViewportHeight() {
     const viewportHeight = window.visualViewport?.height || window.innerHeight
@@ -100,7 +100,7 @@ if (root) {
 
     const bubble = document.createElement('div')
     bubble.className = 'taa-bubble'
-    bubble.innerHTML = escapeHtml(text)
+    bubble.innerHTML = role === 'assistant' ? renderAssistantText(text) : escapeHtml(text)
 
     wrapper.appendChild(bubble)
     messages.appendChild(wrapper)

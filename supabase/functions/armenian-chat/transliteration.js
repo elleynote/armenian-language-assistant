@@ -165,8 +165,7 @@ function isTranslationRequest(question) {
 }
 
 function armenianPhrases(value) {
-  const armenianToken = '[\\u0531-\\u0556\\u0561-\\u0587\\u055E\\u0589’\\\']+'
-  const matches = String(value ?? '').match(new RegExp(`${armenianToken}(?:[ \\t]+${armenianToken})*`, 'gu')) ?? []
+  const matches = String(value ?? '').match(/[\u0531-\u0556\u0561-\u0587\u055E\u0589’']+(?:[ \t]+[\u0531-\u0556\u0561-\u0587\u055E\u0589’']+)*/gu) ?? []
   return [...new Set(matches.map((item) => item.trim()).filter(Boolean))].slice(0, 4)
 }
 

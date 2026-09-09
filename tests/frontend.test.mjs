@@ -54,6 +54,14 @@ test('escapeHtml neutralizes unsafe markup', async () => {
   )
 })
 
+test('assistant text renders markdown bold without allowing raw HTML', async () => {
+  const { renderAssistantText } = await loadCore()
+  assert.equal(
+    renderAssistantText('Use **Tun Role Play** <script>alert(1)</script>'),
+    'Use <strong>Tun Role Play</strong> &lt;script&gt;alert(1)&lt;/script&gt;',
+  )
+})
+
 test('insertAtSelection inserts an Armenian letter at the cursor', async () => {
   const { insertAtSelection } = await loadCore()
   assert.deepEqual(insertAtSelection('բար', 'ե', 3, 3), { value: 'բարե', cursor: 4 })
@@ -97,10 +105,20 @@ test('frontend exposes Western and Eastern Armenian mode selection', async () =>
   assert.match(html, /value="hye"[^>]*>Eastern Armenian</)
 })
 
+test('chatbot uses Online Armenian School blue accents and chat bubble color', async () => {
+  const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
+  const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
+  const html = await readFile(new URL('../frontend/template.html', import.meta.url), 'utf8')
+  assert.match(css, /--taa-accent:\s*#a6d7eb;/i)
+  assert.match(css, /--taa-user:\s*#a6d7eb;/i)
+  assert.match(app, /config\.accent\s*\|\|\s*['"]#A6D7EB['"]/)
+  assert.match(html, /accent:\s*['"]#A6D7EB['"]/)
+  assert.match(css, /\.taa-message--user \.taa-bubble\s*\{[\s\S]*?color:\s*#111;/)
+})
+
 test('chatbot uses Tun branding and fits the remaining viewport without top padding', async () => {
   const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
   const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
-  assert.match(css, /--taa-accent:\s*#db182b;/i)
   assert.match(css, /font-family:\s*['"]?Nunito/i)
   assert.match(css, /padding-top:\s*0;/)
   assert.match(css, /height:\s*var\(--taa-viewport-height,\s*100dvh\);/)

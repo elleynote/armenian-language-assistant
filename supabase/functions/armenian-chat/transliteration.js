@@ -169,15 +169,22 @@ function armenianPhrases(value) {
   return [...new Set(matches.map((item) => item.trim()).filter(Boolean))].slice(0, 4)
 }
 
+function removeExistingTransliteration(value) {
+  return String(value ?? '')
+    .replace(/^\s*Transliteration\s*:[^\r\n]*(?:\r?\n)?/gim, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
 export function appendTranslationTransliteration(answer, question, language = 'hyw') {
   const text = String(answer ?? '').trim()
   if (!text || language !== 'hyw' || !isTranslationRequest(question)) return text
-  if (/\btransliteration\s*:/i.test(text)) return text
 
-  const phrases = [...armenianPhrases(text), ...armenianPhrases(question)]
+  const baseText = removeExistingTransliteration(text)
+  const phrases = [...armenianPhrases(baseText), ...armenianPhrases(question)]
   const unique = [...new Set(phrases)]
-  if (!unique.length) return text
+  if (!unique.length) return baseText
 
   const transliterations = unique.map((phrase) => transliterateWesternArmenian(phrase))
-  return `${text}\n\nTransliteration: ${transliterations.join(' / ')}`
+  return `${baseText}\n\nTransliteration: ${transliterations.join(' / ')}`
 }

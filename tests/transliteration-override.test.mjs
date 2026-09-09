@@ -38,7 +38,7 @@ test('Western Armenian suggestions receive deterministic transliteration even wh
       'You could also practice Բարեւ and Շնորհակալութիւն.',
       'hyw',
     ),
-    'You could also practice Բարեւ and Շնորհակալութիւն.\n\nTransliteration: Parev / Shnorhagalut\'iun',
+    "You could also practice Բարեւ and Շնորհակալութիւն.\n\nTransliteration: Parev / Shnorhagalut'ivn",
   )
 })
 

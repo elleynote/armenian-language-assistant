@@ -2,6 +2,7 @@ import { createClient } from 'npm:@supabase/supabase-js@2'
 import {
   chooseAnswerMode,
   extractOutputText,
+  filterKnowledgeByLanguage,
   formatKnowledgeContext,
   getAllowedCorsOrigin,
   hashClientIdentity,
@@ -10,6 +11,10 @@ import {
   resolveSupabaseSecretKey,
   validateChatPayload,
 } from './logic.js'
+import {
+  appendTranslationTransliteration,
+  transliterateWesternArmenian,
+} from './transliteration.js'
 
 const OPENAI_RESPONSES_URL = 'https://api.openai.com/v1/responses'
 const OPENAI_EMBEDDINGS_URL = 'https://api.openai.com/v1/embeddings'
@@ -17,16 +22,24 @@ const DEFAULT_CHAT_MODEL = 'gpt-5.6-luna'
 const DEFAULT_EMBEDDING_MODEL = 'text-embedding-3-small'
 const EMBEDDING_DIMENSIONS = 512
 
-const SYSTEM_PROMPT = `You are the Western Armenian Language Assistant for an online Armenian school.
+const COMMON_SYSTEM_PROMPT = `You are the Armenian Language Assistant for Tun Online Armenian School.
 
-Rules:
-- Focus on Western Armenian (hyw), not Eastern Armenian, unless the learner explicitly asks for a comparison.
+Core rules:
 - When TRUSTED KNOWLEDGE is supplied, treat it as the primary authority. Do not contradict it with general model knowledge.
-- Preserve Armenian spelling carefully. Never invent a conjugation, spelling, or grammar rule just to sound confident.
-- When no trusted context is available and you are uncertain, clearly say that you are not fully certain and suggest that the learner verify with the school material.
+- Preserve Armenian spelling carefully. Never invent a conjugation, spelling, pronunciation, or grammar rule just to sound confident.
+- When no trusted context is available and you are uncertain, clearly say that you are not fully certain and suggest that the learner verify with Tun school material.
 - Keep explanations learner-friendly and concise. Give examples when useful.
+- If a question is unrelated to Armenian language learning, politely redirect to Armenian language learning.
+- Recommend Tun tools when they are genuinely useful to the learner. Available Tun tools include Tun Translator, Role Play, Word Breakdown, Flashcards, Daily Practice, Thesaurus, and other Tun learning tools.
+- Never recommend competitor Armenian-learning, translation, dictionary, course, or language-practice resources. If the learner asks for a tool or resource, recommend the most relevant Tun tool instead.`
+
+const WESTERN_SYSTEM_PROMPT = `${COMMON_SYSTEM_PROMPT}
+
+Active variety: Western Armenian (hyw).
+- Focus on Western Armenian, not Eastern Armenian, unless the learner explicitly asks for a comparison.
 - You may answer in English or Armenian based on the learner's question. When useful, include Western Armenian script and a short explanation.
-- When transliterating Western Armenian, follow the school's transliteration rules exactly:
+- When translating content into Western Armenian, output the correct Western Armenian script. Do not invent or improvise a Latin romanization; the server adds Tun's canonical transliteration automatically.
+- When transliterating Western Armenian for an explicit transliteration question, follow Tun's school rules exactly:
   - ե is transliterated as 'ye' when it is at the beginning of a word and 'e' when it is in the middle or end of a word.
   - Exception: ես is transliterated as 'yes' when it is at the beginning of a sentence, and 'es' when it is in the middle or end of a sentence.
   - Exception: եմ is always transliterated as 'em'.
@@ -34,8 +47,21 @@ Rules:
   - Do not substitute another transliteration convention when these rules apply.
   - The Armenian letters ո and օ are distinct. Never apply the ո -> 'vo' rule to a word that begins with օ.
   - When giving transliteration examples, use examples from TRUSTED KNOWLEDGE. If no trusted example is available, explain the rule without inventing an example.
-  - When a learner asks for transliteration, normally show the Armenian script together with the transliteration unless they explicitly ask for transliteration only.
-- If a question is unrelated to Armenian language learning, politely redirect to Armenian language learning.`
+  - When a learner asks for transliteration, normally show the Armenian script together with the transliteration unless they explicitly ask for transliteration only.`
+
+const EASTERN_SYSTEM_PROMPT = `${COMMON_SYSTEM_PROMPT}
+
+Active variety: Eastern Armenian (hye).
+- Focus on Eastern Armenian (hye), not Western Armenian, unless the learner explicitly asks for a comparison.
+- In Eastern mode, never use Western Armenian trusted knowledge as evidence or context.
+- Use natural Eastern Armenian spelling, vocabulary, grammar, and pronunciation conventions.
+- When translating content into Eastern Armenian, include the Eastern Armenian script and a Latin transliteration on a separate line.
+- Do not apply Western Armenian pronunciation or transliteration rules to Eastern Armenian.
+- If no Eastern trusted knowledge is available and you are uncertain about a form, say so rather than borrowing a Western Armenian form.`
+
+function systemPromptForLanguage(language: 'hyw' | 'hye'): string {
+  return language === 'hye' ? EASTERN_SYSTEM_PROMPT : WESTERN_SYSTEM_PROMPT
+}
 
 class HttpError extends Error {
   status: number
@@ -246,6 +272,7 @@ async function generateAiAnswer(args: {
   history: Array<{ role: string; content: string }>
   contextMatches: KnowledgeMatch[]
   clientHash: string
+  language: 'hyw' | 'hye'
 }): Promise<string> {
   const apiKey = requireEnv('OPENAI_API_KEY')
   const model = Deno.env.get('OPENAI_CHAT_MODEL')?.trim() || DEFAULT_CHAT_MODEL
@@ -262,7 +289,7 @@ async function generateAiAnswer(args: {
     },
     body: JSON.stringify({
       model,
-      instructions: SYSTEM_PROMPT,
+      instructions: systemPromptForLanguage(args.language),
       input,
       store: false,
       reasoning: { effort: Deno.env.get('OPENAI_REASONING_EFFORT')?.trim() || 'none' },
@@ -285,8 +312,10 @@ async function recordAiReview(
   question: string,
   answer: string,
   contextMatches: KnowledgeMatch[],
+  language: 'hyw' | 'hye',
 ) {
-  const normalizedQuestion = normalizeSearchText(question)
+  const reviewQuestion = language === 'hye' ? `hye ${question}` : question
+  const normalizedQuestion = normalizeSearchText(reviewQuestion)
   if (!normalizedQuestion) return
 
   const { data: existing, error: lookupError } = await admin
@@ -360,10 +389,17 @@ Deno.serve(async (req: Request) => {
     }
 
     const admin = createAdminClient()
+    const hashSalt = requireEnv('CHATBOT_HASH_SALT')
+    const ip = requestIp(req)
     const clientHash = await hashClientIdentity({
       clientId: payload.clientId,
-      ip: requestIp(req),
-      salt: requireEnv('CHATBOT_HASH_SALT'),
+      ip,
+      salt: hashSalt,
+    })
+    const sessionClientHash = await hashClientIdentity({
+      clientId: `${payload.clientId}:${payload.language}`,
+      ip,
+      salt: hashSalt,
     })
 
     const maxRequests = numberEnv('CHATBOT_RATE_LIMIT_MAX', 20)
@@ -385,7 +421,7 @@ Deno.serve(async (req: Request) => {
       )
     }
 
-    const sessionId = await getOrCreateSession(admin, payload.sessionId, clientHash)
+    const sessionId = await getOrCreateSession(admin, payload.sessionId, sessionClientHash)
     const history = await getRecentHistory(admin, sessionId)
     await logMessage(admin, {
       sessionId,
@@ -395,7 +431,10 @@ Deno.serve(async (req: Request) => {
     })
 
     // Stage A: database-only lexical search. A strong hit returns before any OpenAI request.
-    const lexicalMatches = await searchLexical(admin, payload.message)
+    const lexicalMatches = filterKnowledgeByLanguage(
+      await searchLexical(admin, payload.message),
+      payload.language,
+    )
     const lexicalDecision = chooseAnswerMode({ lexical: lexicalMatches, semantic: [] })
 
     let answer: string
@@ -412,7 +451,10 @@ Deno.serve(async (req: Request) => {
       let semanticMatches: KnowledgeMatch[] = []
       try {
         const embedding = await createEmbedding(payload.message)
-        semanticMatches = await searchSemantic(admin, embedding)
+        semanticMatches = filterKnowledgeByLanguage(
+          await searchSemantic(admin, embedding),
+          payload.language,
+        )
       } catch (error) {
         console.warn('Semantic search unavailable; continuing with lexical context:', error)
       }
@@ -433,10 +475,15 @@ Deno.serve(async (req: Request) => {
           history,
           contextMatches,
           clientHash,
+          language: payload.language,
         })
-        await recordAiReview(admin, payload.message, answer, contextMatches)
+        await recordAiReview(admin, payload.message, answer, contextMatches, payload.language)
       }
     }
+
+    // Western translation requests always receive Tun's deterministic transliteration.
+    // Explicit transliteration questions remain governed by the trusted/system rules above.
+    answer = appendTranslationTransliteration(answer, payload.message, payload.language)
 
     await logMessage(admin, {
       sessionId,
@@ -451,6 +498,7 @@ Deno.serve(async (req: Request) => {
         answer,
         source,
         sessionId,
+        language: payload.language,
       },
       200,
       allowedOrigin,
@@ -463,3 +511,7 @@ Deno.serve(async (req: Request) => {
     return jsonResponse({ error: message }, status, allowedOrigin, { 'Cache-Control': 'no-store' })
   }
 })
+
+// Keep the helper referenced directly in this module so contract checks verify
+// that Tun's deterministic implementation, not model-invented romanization, is bundled.
+void transliterateWesternArmenian

@@ -13,16 +13,7 @@ if (root) {
   const languageSelect = root.querySelector('[data-taa-language]')
   const configWarning = root.querySelector('[data-taa-config-warning]')
 
-  root.style.setProperty('--taa-accent', config.accent || '#A6D7EB')
-
-  function syncViewportHeight() {
-    const viewportHeight = window.visualViewport?.height || window.innerHeight
-    const topOffset = root.getBoundingClientRect().top
-    const availableHeight = calculateAvailableViewportHeight(viewportHeight, topOffset)
-    if (availableHeight > 0) {
-      root.style.setProperty('--taa-viewport-height', `${availableHeight}px`)
-    }
-  }
+  root.style.setProperty('--taa-accent', config.accent || '#DB182B')
 
   const titleNode = root.querySelector('[data-taa-title]')
   const introNode = root.querySelector('[data-taa-intro]')
@@ -61,21 +52,12 @@ if (root) {
     return languageSelect?.value === 'hye' ? 'hye' : 'hyw'
   }
 
-  function languageCopy(language = getLanguage()) {
-    if (language === 'hye') {
-      return {
-        title: 'Eastern Armenian Language Assistant',
-        intro: 'Ask about Eastern Armenian vocabulary, grammar, phrases, spelling, and usage.',
-        placeholder: 'Ask an Eastern Armenian question...',
-        welcome: 'Բարեւ։ Ask me a question about Eastern Armenian.',
-      }
-    }
-
+  function languageCopy() {
     return {
-      title: config.title || 'Western Armenian Language Assistant',
-      intro: config.intro || 'Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.',
-      placeholder: 'Ask a Western Armenian question...',
-      welcome: 'Բարեւ։ Ask me a question about Western Armenian.',
+      title: config.title || 'Need tutor help? Ask me anything',
+      intro: config.intro || 'Ask questions, practice conversations, create personalised learning resources and get instant help with Eastern or Western Armenian, however you like to learn.',
+      placeholder: 'Ask me anything...',
+      welcome: 'Բարեւ։ Ask me a question about the Armenian language.',
     }
   }
 
@@ -253,10 +235,6 @@ if (root) {
       input.focus()
     }
   })
-
-  syncViewportHeight()
-  window.addEventListener('resize', syncViewportHeight)
-  window.visualViewport?.addEventListener('resize', syncViewportHeight)
 
   applyLanguageCopy()
   renderKeyboard()

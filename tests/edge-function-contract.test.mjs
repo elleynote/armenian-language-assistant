@@ -12,7 +12,7 @@ test('public chat function disables JWT verification explicitly', () => {
 })
 
 test('chat request path searches lexical database before requesting an embedding', () => {
-  const lexicalIndex = source.indexOf('const lexicalMatches = await searchLexical')
+  const lexicalIndex = source.indexOf('await searchLexical(')
   const embeddingIndex = source.indexOf('const embedding = await createEmbedding')
   assert.ok(lexicalIndex >= 0, 'runtime lexical search is required')
   assert.ok(embeddingIndex >= 0, 'runtime embedding fallback is required')

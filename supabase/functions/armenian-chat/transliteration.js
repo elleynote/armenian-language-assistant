@@ -176,6 +176,18 @@ function removeExistingTransliteration(value) {
     .trim()
 }
 
+export function appendWesternArmenianTransliterations(answer, language = 'hyw') {
+  const text = String(answer ?? '').trim()
+  if (!text || language !== 'hyw') return text
+
+  const baseText = removeExistingTransliteration(text)
+  const phrases = armenianPhrases(baseText)
+  if (!phrases.length) return baseText
+
+  const transliterations = phrases.map((phrase) => transliterateWesternArmenian(phrase))
+  return `${baseText}\n\nTransliteration: ${transliterations.join(' / ')}`
+}
+
 export function appendTranslationTransliteration(answer, question, language = 'hyw') {
   const text = String(answer ?? '').trim()
   if (!text || language !== 'hyw' || !isTranslationRequest(question)) return text

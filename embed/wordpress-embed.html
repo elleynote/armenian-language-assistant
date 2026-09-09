@@ -71,8 +71,8 @@
   --taa-assistant: #f8f8f8;
   width: 100%;
   max-width: 1120px;
-  height: 100vh;
-  min-height: 100dvh;
+  height: var(--taa-viewport-height, 100dvh);
+  min-height: 0;
   margin: 0 auto;
   padding-top: 0;
   color: var(--taa-text);
@@ -537,6 +537,14 @@ export function insertAtSelection(value, insert, selectionStart, selectionEnd) {
   return { value: nextValue, cursor: start + text.length }
 }
 
+export function calculateAvailableViewportHeight(viewportHeight, topOffset) {
+  const height = Number(viewportHeight)
+  const top = Number(topOffset)
+  if (!Number.isFinite(height) || height <= 0) return 0
+  if (!Number.isFinite(top) || top <= 0 || top >= height) return height
+  return Math.max(0, height - top)
+}
+
 const root = document.getElementById('tun-armenian-assistant')
 
 if (root) {
@@ -553,6 +561,15 @@ if (root) {
   const configWarning = root.querySelector('[data-taa-config-warning]')
 
   root.style.setProperty('--taa-accent', config.accent || '#DB182B')
+
+  function syncViewportHeight() {
+    const viewportHeight = window.visualViewport?.height || window.innerHeight
+    const topOffset = root.getBoundingClientRect().top
+    const availableHeight = calculateAvailableViewportHeight(viewportHeight, topOffset)
+    if (availableHeight > 0) {
+      root.style.setProperty('--taa-viewport-height', `${availableHeight}px`)
+    }
+  }
 
   const titleNode = root.querySelector('[data-taa-title]')
   const introNode = root.querySelector('[data-taa-intro]')
@@ -783,6 +800,10 @@ if (root) {
       input.focus()
     }
   })
+
+  syncViewportHeight()
+  window.addEventListener('resize', syncViewportHeight)
+  window.visualViewport?.addEventListener('resize', syncViewportHeight)
 
   applyLanguageCopy()
   renderKeyboard()

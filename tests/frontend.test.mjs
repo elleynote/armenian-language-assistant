@@ -68,6 +68,13 @@ test('Armenian keyboard exposes the expected 39-key Eastern/Western Unicode layo
   assert.equal(ARMENIAN_KEYS.at(-1), 'ֆ')
 })
 
+test('chat height uses only viewport space remaining below its top offset', async () => {
+  const { calculateAvailableViewportHeight } = await loadCore()
+  assert.equal(calculateAvailableViewportHeight(900, 180), 720)
+  assert.equal(calculateAvailableViewportHeight(900, -40), 900)
+  assert.equal(calculateAvailableViewportHeight(900, 920), 900)
+})
+
 test('WordPress embed is self-contained and contains no secret keys', async () => {
   let html
   try {
@@ -90,14 +97,18 @@ test('frontend exposes Western and Eastern Armenian mode selection', async () =>
   assert.match(html, /value="hye"[^>]*>Eastern Armenian</)
 })
 
-test('chatbot uses Tun branding and fills the viewport without top padding', async () => {
+test('chatbot uses Tun branding and fits the remaining viewport without top padding', async () => {
   const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
+  const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
   assert.match(css, /--taa-accent:\s*#db182b;/i)
   assert.match(css, /font-family:\s*['"]?Nunito/i)
   assert.match(css, /padding-top:\s*0;/)
-  assert.match(css, /min-height:\s*100dvh;/)
+  assert.match(css, /height:\s*var\(--taa-viewport-height,\s*100dvh\);/)
+  assert.doesNotMatch(css, /min-height:\s*100dvh;/)
   assert.match(css, /\.taa-shell\s*\{[\s\S]*?display:\s*flex;[\s\S]*?flex-direction:\s*column;/)
   assert.match(css, /\.taa-messages\s*\{[\s\S]*?flex:\s*1\s+1\s+auto;/)
+  assert.match(app, /calculateAvailableViewportHeight/)
+  assert.match(app, /--taa-viewport-height/)
 })
 
 test('header centers and styles the new chat action', async () => {

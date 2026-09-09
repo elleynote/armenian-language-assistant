@@ -76,7 +76,7 @@ test('Armenian keyboard exposes the expected 39-key Eastern/Western Unicode layo
   assert.equal(ARMENIAN_KEYS.at(-1), 'ֆ')
 })
 
-test('chat height uses only viewport space remaining below its top offset', async () => {
+test('chat height helper remains deterministic for legacy callers', async () => {
   const { calculateAvailableViewportHeight } = await loadCore()
   assert.equal(calculateAvailableViewportHeight(900, 180), 720)
   assert.equal(calculateAvailableViewportHeight(900, -40), 900)
@@ -105,28 +105,59 @@ test('frontend exposes Western and Eastern Armenian mode selection', async () =>
   assert.match(html, /value="hye"[^>]*>Eastern Armenian</)
 })
 
-test('chatbot uses Online Armenian School blue accents and chat bubble color', async () => {
+test('frontend uses the revised tutor-help copy from client feedback', async () => {
+  const html = await readFile(new URL('../frontend/template.html', import.meta.url), 'utf8')
+  const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
+  const intro = 'Ask questions, practice conversations, create personalised learning resources and get instant help with Eastern or Western Armenian, however you like to learn.'
+
+  assert.doesNotMatch(html, /Online Armenian School/i)
+  assert.match(html, /Need tutor help\? Ask me anything/)
+  assert.ok(html.includes(intro))
+  assert.match(html, /placeholder="Ask me anything\.\.\."/)
+  assert.match(html, /Բարեւ։ Ask me a question about the Armenian language\./)
+
+  assert.match(app, /Need tutor help\? Ask me anything/)
+  assert.ok(app.includes(intro))
+  assert.match(app, /Ask me anything\.\.\./)
+  assert.match(app, /Բարեւ։ Ask me a question about the Armenian language\./)
+  assert.doesNotMatch(app, /(Western|Eastern) Armenian Language Assistant/)
+})
+
+test('only main action buttons use the approved school blue while Tun palette remains elsewhere', async () => {
   const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
   const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
   const html = await readFile(new URL('../frontend/template.html', import.meta.url), 'utf8')
-  assert.match(css, /--taa-accent:\s*#a6d7eb;/i)
-  assert.match(css, /--taa-user:\s*#a6d7eb;/i)
-  assert.match(app, /config\.accent\s*\|\|\s*['"]#A6D7EB['"]/)
-  assert.match(html, /accent:\s*['"]#A6D7EB['"]/)
-  assert.match(css, /\.taa-message--user \.taa-bubble\s*\{[\s\S]*?color:\s*#111;/)
+
+  assert.match(css, /--taa-accent:\s*#db182b;/i)
+  assert.match(css, /--taa-user:\s*#db182b;/i)
+  assert.match(css, /--taa-bg:\s*#fff8f8;/i)
+  assert.match(css, /--taa-button:\s*#1e78ce;/i)
+  assert.match(css, /--taa-button-dark:/i)
+  assert.match(css, /\.taa-send\s*\{[\s\S]*?background:\s*var\(--taa-button\);/)
+  assert.match(css, /\.taa-reset\s*\{[\s\S]*?background:\s*var\(--taa-button\);/)
+  assert.match(css, /\.taa-keyboard-toggle\s*\{[\s\S]*?background:\s*var\(--taa-button\);/)
+  assert.match(css, /\.taa-message--user \.taa-bubble\s*\{[\s\S]*?background:\s*var\(--taa-user\);[\s\S]*?color:\s*#fff;/)
+  assert.match(app, /config\.accent\s*\|\|\s*['"]#DB182B['"]/)
+  assert.match(html, /accent:\s*['"]#DB182B['"]/)
 })
 
-test('chatbot uses Tun branding and fits the remaining viewport without top padding', async () => {
+test('chatbot content occupies a full viewport and pushes the footer below', async () => {
   const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
   const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
-  assert.match(css, /font-family:\s*['"]?Nunito/i)
-  assert.match(css, /padding-top:\s*0;/)
-  assert.match(css, /height:\s*var\(--taa-viewport-height,\s*100dvh\);/)
-  assert.doesNotMatch(css, /min-height:\s*100dvh;/)
+
+  assert.match(css, /#tun-armenian-assistant\s*\{[\s\S]*?height:\s*100dvh;/)
+  assert.match(css, /#tun-armenian-assistant\s*\{[\s\S]*?min-height:\s*100dvh;/)
+  assert.doesNotMatch(css, /height:\s*var\(--taa-viewport-height/)
+  assert.doesNotMatch(app, /syncViewportHeight|--taa-viewport-height|visualViewport/)
   assert.match(css, /\.taa-shell\s*\{[\s\S]*?display:\s*flex;[\s\S]*?flex-direction:\s*column;/)
   assert.match(css, /\.taa-messages\s*\{[\s\S]*?flex:\s*1\s+1\s+auto;/)
-  assert.match(app, /calculateAvailableViewportHeight/)
-  assert.match(app, /--taa-viewport-height/)
+})
+
+test('Armenian keyboard is compact enough to preserve visible conversation space', async () => {
+  const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
+  assert.match(css, /\.taa-keyboard\s*\{[\s\S]*?grid-template-columns:\s*repeat\(13,/)
+  assert.match(css, /\.taa-key\s*\{[\s\S]*?min-height:\s*34px;/)
+  assert.match(css, /@media \(max-width:\s*680px\)[\s\S]*?\.taa-keyboard\s*\{\s*grid-template-columns:\s*repeat\(8,/)
 })
 
 test('composer is compact so the conversation area gets more space', async () => {

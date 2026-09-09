@@ -20,6 +20,13 @@ export function validateChatPayload(body) {
     throw new Error('clientId must be between 8 and 128 characters')
   }
 
+  const language = body.language === undefined || body.language === null || body.language === ''
+    ? 'hyw'
+    : String(body.language).trim()
+  if (language !== 'hyw' && language !== 'hye') {
+    throw new Error('language must be hyw or hye')
+  }
+
   let sessionId = null
   if (body.sessionId !== undefined && body.sessionId !== null && body.sessionId !== '') {
     const sessionPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
@@ -29,7 +36,17 @@ export function validateChatPayload(body) {
     sessionId = body.sessionId
   }
 
-  return { message, clientId, sessionId }
+  return { message, clientId, sessionId, language }
+}
+
+export function filterKnowledgeByLanguage(matches = [], language = 'hyw') {
+  return matches.filter((match) => {
+    const value = String(match?.language ?? '').trim().toLocaleLowerCase('en')
+    if (language === 'hye') {
+      return value === 'hye' || value === 'eastern armenian'
+    }
+    return value === '' || value === 'hyw' || value === 'western armenian'
+  })
 }
 
 export function chooseAnswerMode({

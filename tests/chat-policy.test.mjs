@@ -12,18 +12,34 @@ import {
   validateChatPayload,
 } from '../supabase/functions/armenian-chat/logic.js'
 
-test('validateChatPayload accepts a trimmed learner question', () => {
+test('validateChatPayload accepts a trimmed learner question and selected language', () => {
   assert.deepEqual(
     validateChatPayload({
       message: '  How do I say hello in Western Armenian?  ',
       clientId: '4c9a9024-85c9-4a39-bc69-4b1a9ab96fd1',
       sessionId: null,
+      language: 'hye',
     }),
     {
       message: 'How do I say hello in Western Armenian?',
       clientId: '4c9a9024-85c9-4a39-bc69-4b1a9ab96fd1',
       sessionId: null,
+      language: 'hye',
     },
+  )
+})
+
+test('validateChatPayload defaults legacy requests to Western Armenian', () => {
+  assert.equal(
+    validateChatPayload({ message: 'hello', clientId: 'client-12345678' }).language,
+    'hyw',
+  )
+})
+
+test('validateChatPayload rejects unsupported Armenian varieties', () => {
+  assert.throws(
+    () => validateChatPayload({ message: 'hello', clientId: 'client-12345678', language: 'hy' }),
+    /language must be hyw or hye/i,
   )
 })
 
@@ -194,4 +210,19 @@ test('resolveSupabaseSecretKey supports the modern single secret key used by loc
     resolveSupabaseSecretKey({ singleSecretKey: ' sb_secret_local ' }),
     'sb_secret_local',
   )
+})
+
+test('Western transliteration helper matches Tun translator rules', async () => {
+  let transliterateWesternArmenian
+  try {
+    ;({ transliterateWesternArmenian } = await import('../supabase/functions/armenian-chat/transliteration.js'))
+  } catch (error) {
+    assert.fail(`Western transliteration helper is required: ${error.message}`)
+  }
+
+  assert.equal(transliterateWesternArmenian('ես եմ'), 'yes em')
+  assert.equal(transliterateWesternArmenian('դուն ես'), 'tun es')
+  assert.equal(transliterateWesternArmenian('ոստիկան'), 'vostigan')
+  assert.equal(transliterateWesternArmenian('օր'), 'or')
+  assert.equal(transliterateWesternArmenian('խնձոր'), 'khntzor')
 })

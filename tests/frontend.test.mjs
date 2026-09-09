@@ -12,27 +12,29 @@ async function loadCore() {
   }
 }
 
-test('buildChatPayload trims message and keeps stable identifiers', async () => {
+test('buildChatPayload trims message, keeps identifiers, and sends selected language', async () => {
   const { buildChatPayload } = await loadCore()
   assert.deepEqual(
     buildChatPayload({
       message: '  How do I say hello?  ',
       clientId: 'client-123',
       sessionId: '123e4567-e89b-12d3-a456-426614174000',
+      language: 'hye',
     }),
     {
       message: 'How do I say hello?',
       clientId: 'client-123',
       sessionId: '123e4567-e89b-12d3-a456-426614174000',
+      language: 'hye',
     },
   )
 })
 
-test('buildChatPayload omits an empty session id', async () => {
+test('buildChatPayload defaults language to Western Armenian and omits an empty session id', async () => {
   const { buildChatPayload } = await loadCore()
   assert.deepEqual(
     buildChatPayload({ message: 'Barev', clientId: 'client-123', sessionId: '' }),
-    { message: 'Barev', clientId: 'client-123' },
+    { message: 'Barev', clientId: 'client-123', language: 'hyw' },
   )
 })
 
@@ -81,9 +83,21 @@ test('WordPress embed is self-contained and contains no secret keys', async () =
   assert.doesNotMatch(html, /<link[^>]+stylesheet/i)
 })
 
-test('chatbot has top breathing space above the card', async () => {
+test('frontend exposes Western and Eastern Armenian mode selection', async () => {
+  const html = await readFile(new URL('../frontend/template.html', import.meta.url), 'utf8')
+  assert.match(html, /data-taa-language/)
+  assert.match(html, /value="hyw"[^>]*>Western Armenian</)
+  assert.match(html, /value="hye"[^>]*>Eastern Armenian</)
+})
+
+test('chatbot uses Tun branding and fills the viewport without top padding', async () => {
   const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
-  assert.match(css, /padding-top:\s*16px;/)
+  assert.match(css, /--taa-accent:\s*#db182b;/i)
+  assert.match(css, /font-family:\s*['"]?Nunito/i)
+  assert.match(css, /padding-top:\s*0;/)
+  assert.match(css, /min-height:\s*100dvh;/)
+  assert.match(css, /\.taa-shell\s*\{[\s\S]*?display:\s*flex;[\s\S]*?flex-direction:\s*column;/)
+  assert.match(css, /\.taa-messages\s*\{[\s\S]*?flex:\s*1\s+1\s+auto;/)
 })
 
 test('header centers and styles the new chat action', async () => {
@@ -91,6 +105,13 @@ test('header centers and styles the new chat action', async () => {
   assert.match(css, /\.taa-header\s*\{[\s\S]*?align-items:\s*center;/)
   assert.match(css, /\.taa-reset\s*\{[\s\S]*?display:\s*inline-flex;/)
   assert.match(css, /\.taa-reset\s*\{[\s\S]*?min-width:\s*110px;/)
+})
+
+test('frontend resets the session when Armenian variety changes', async () => {
+  const app = await readFile(new URL('../frontend/app.js', import.meta.url), 'utf8')
+  assert.match(app, /languageSelect\?\.addEventListener\(['"]change['"]/)
+  assert.match(app, /clearSessionId\(\)/)
+  assert.match(app, /language:\s*getLanguage\(\)/)
 })
 
 test('frontend does not expose answer source labels to visitors', async () => {

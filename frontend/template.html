@@ -7,9 +7,8 @@
 
     <header class="taa-header">
       <div class="taa-header-copy">
-        <p class="taa-eyebrow">Online Armenian School</p>
-        <h2 class="taa-title" data-taa-title>Western Armenian Language Assistant</h2>
-        <p class="taa-intro" data-taa-intro>Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.</p>
+        <h2 class="taa-title" data-taa-title>Need tutor help? Ask me anything</h2>
+        <p class="taa-intro" data-taa-intro>Ask questions, practice conversations, create personalised learning resources and get instant help with Eastern or Western Armenian, however you like to learn.</p>
       </div>
 
       <div class="taa-header-actions">
@@ -26,7 +25,7 @@
 
     <main class="taa-messages" data-taa-messages role="log" aria-live="polite" aria-label="Conversation">
       <div class="taa-message taa-message--assistant">
-        <div class="taa-bubble" data-taa-welcome>Բարեւ։ Ask me a question about Western Armenian.</div>
+        <div class="taa-bubble" data-taa-welcome>Բարեւ։ Ask me a question about the Armenian language.</div>
       </div>
     </main>
 
@@ -37,7 +36,7 @@
           data-taa-input
           rows="2"
           maxlength="2000"
-          placeholder="Ask a Western Armenian question..."
+          placeholder="Ask me anything..."
           aria-label="Your question"
           required
         ></textarea>
@@ -61,9 +60,9 @@
 <script>
 window.TunArmenianAssistantConfig = Object.assign({
   apiUrl: 'https://isubcltyakhotesjifsw.supabase.co/functions/v1/armenian-chat',
-  title: 'Western Armenian Language Assistant',
-  intro: 'Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.',
-  accent: '#A6D7EB'
+  title: 'Need tutor help? Ask me anything',
+  intro: 'Ask questions, practice conversations, create personalised learning resources and get instant help with Eastern or Western Armenian, however you like to learn.',
+  accent: '#DB182B'
 }, window.TunArmenianAssistantConfig || {});
 </script>
 

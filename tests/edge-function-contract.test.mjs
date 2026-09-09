@@ -48,44 +48,45 @@ test('system prompt enforces school transliteration rules', () => {
   const emWord = '\u0565\u0574'
   const oLetter = '\u0578'
 
-  assert.ok(
-    source.includes(
-      `${eLetter} is transliterated as 'ye' when it is at the beginning of a word and 'e' when it is in the middle or end of a word.`
-    )
-  )
-
-  assert.ok(
-    source.includes(
-      `${esWord} is transliterated as 'yes' when it is at the beginning of a sentence, and 'es' when it is in the middle or end of a sentence.`
-    )
-  )
-
-  assert.ok(
-    source.includes(
-      `${emWord} is always transliterated as 'em'.`
-    )
-  )
-
-  assert.ok(
-    source.includes(
-      `${oLetter} is transliterated as 'vo' when it is at the beginning of a word and 'o' when it is in the middle or end of a word.`
-    )
-  )
+  assert.ok(source.includes(`${eLetter} is transliterated as 'ye' when it is at the beginning of a word and 'e' when it is in the middle or end of a word.`))
+  assert.ok(source.includes(`${esWord} is transliterated as 'yes' when it is at the beginning of a sentence, and 'es' when it is in the middle or end of a sentence.`))
+  assert.ok(source.includes(`${emWord} is always transliterated as 'em'.`))
+  assert.ok(source.includes(`${oLetter} is transliterated as 'vo' when it is at the beginning of a word and 'o' when it is in the middle or end of a word.`))
 })
 
 test('system prompt distinguishes vo from o-letter transliteration', () => {
   const voLetter = '\u0578'
   const oLetter = '\u0585'
 
-  assert.ok(
-    source.includes(
-      `The Armenian letters ${voLetter} and ${oLetter} are distinct. Never apply the ${voLetter} -> 'vo' rule to a word that begins with ${oLetter}.`
-    )
-  )
+  assert.ok(source.includes(`The Armenian letters ${voLetter} and ${oLetter} are distinct. Never apply the ${voLetter} -> 'vo' rule to a word that begins with ${oLetter}.`))
+})
 
-  assert.ok(
-    source.includes(
-      'When giving transliteration examples, use examples from TRUSTED KNOWLEDGE. If no trusted example is available, explain the rule without inventing an example.'
-    )
-  )
+test('chat function treats selected Armenian variety as an explicit request contract', () => {
+  assert.match(source, /payload\.language/)
+  assert.match(source, /language:\s*payload\.language/)
+})
+
+test('trusted retrieval is filtered by selected Armenian variety before answer selection', () => {
+  assert.match(source, /filterKnowledgeByLanguage/)
+  assert.match(source, /filterKnowledgeByLanguage\(.*payload\.language/s)
+})
+
+test('Eastern mode is prohibited from consuming Western trusted context', () => {
+  assert.match(source, /Eastern Armenian \(hye\)/)
+  assert.match(source, /never use Western Armenian trusted knowledge/i)
+})
+
+test('Western translation answers receive deterministic server-side transliteration', () => {
+  assert.match(source, /transliterateWesternArmenian/)
+  assert.match(source, /appendTranslationTransliteration/)
+})
+
+test('assistant recommends Tun tools only and never competitors', () => {
+  assert.match(source, /Tun Translator/)
+  assert.match(source, /Role Play/)
+  assert.match(source, /Word Breakdown/)
+  assert.match(source, /Flashcards/)
+  assert.match(source, /Daily Practice/)
+  assert.match(source, /Thesaurus/)
+  assert.match(source, /Never recommend competitor/i)
 })

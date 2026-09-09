@@ -226,3 +226,21 @@ test('Western transliteration helper matches Tun translator rules', async () => 
   assert.equal(transliterateWesternArmenian('օր'), 'or')
   assert.equal(transliterateWesternArmenian('խնձոր'), 'khntsor')
 })
+
+test('Western transliteration preserves elision and normalizes Armenian question punctuation', async () => {
+  let appendTranslationTransliteration
+  try {
+    ;({ appendTranslationTransliteration } = await import('../supabase/functions/armenian-chat/transliteration.js'))
+  } catch (error) {
+    assert.fail(`Western transliteration helper is required: ${error.message}`)
+  }
+
+  assert.equal(
+    appendTranslationTransliteration(
+      'Դուն ի՞նչ կ’ընես։',
+      'Translate “What are you doing?” into Western Armenian.',
+      'hyw',
+    ),
+    "Դուն ի՞նչ կ’ընես։\n\nTransliteration: Tun inch' g'ënes?",
+  )
+})

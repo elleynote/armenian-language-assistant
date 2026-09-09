@@ -7,9 +7,8 @@
 
     <header class="taa-header">
       <div class="taa-header-copy">
-        <p class="taa-eyebrow">Online Armenian School</p>
-        <h2 class="taa-title" data-taa-title>Western Armenian Language Assistant</h2>
-        <p class="taa-intro" data-taa-intro>Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.</p>
+        <h2 class="taa-title" data-taa-title>Need tutor help? Ask me anything</h2>
+        <p class="taa-intro" data-taa-intro>Ask questions, practice conversations, create personalised learning resources and get instant help with Eastern or Western Armenian, however you like to learn.</p>
       </div>
 
       <div class="taa-header-actions">
@@ -26,7 +25,7 @@
 
     <main class="taa-messages" data-taa-messages role="log" aria-live="polite" aria-label="Conversation">
       <div class="taa-message taa-message--assistant">
-        <div class="taa-bubble" data-taa-welcome>Բարեւ։ Ask me a question about Western Armenian.</div>
+        <div class="taa-bubble" data-taa-welcome>Բարեւ։ Ask me a question about the Armenian language.</div>
       </div>
     </main>
 
@@ -37,7 +36,7 @@
           data-taa-input
           rows="2"
           maxlength="2000"
-          placeholder="Ask a Western Armenian question..."
+          placeholder="Ask me anything..."
           aria-label="Your question"
           required
         ></textarea>
@@ -56,19 +55,21 @@
 
 <style>
 #tun-armenian-assistant {
-  --taa-accent: #a6d7eb;
-  --taa-accent-dark: #7fbfd9;
-  --taa-bg: #f7fcfe;
+  --taa-accent: #db182b;
+  --taa-accent-dark: #b81425;
+  --taa-bg: #fff8f8;
   --taa-surface: #ffffff;
   --taa-text: #111111;
   --taa-muted: #666666;
-  --taa-line: #dcecf2;
-  --taa-user: #a6d7eb;
+  --taa-line: #ece3e5;
+  --taa-user: #db182b;
   --taa-assistant: #f8f8f8;
+  --taa-button: #1e78ce;
+  --taa-button-dark: #1766b1;
   width: 100%;
   max-width: 1120px;
-  height: var(--taa-viewport-height, 100dvh);
-  min-height: 0;
+  height: 100dvh;
+  min-height: 100dvh;
   margin: 0 auto;
   padding-top: 0;
   color: var(--taa-text);
@@ -113,7 +114,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding: 20px 24px 16px;
+  padding: 16px 24px 14px;
   border-bottom: 1px solid var(--taa-line);
   background: linear-gradient(135deg, var(--taa-bg), #fff);
 }
@@ -129,29 +130,20 @@
   gap: 10px;
 }
 
-#tun-armenian-assistant .taa-eyebrow {
-  margin: 0 0 6px;
-  color: var(--taa-accent);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
 #tun-armenian-assistant .taa-title {
   margin: 0;
   color: #000;
-  font-size: clamp(24px, 3vw, 36px);
+  font-size: clamp(24px, 3vw, 34px);
   font-weight: 700;
   line-height: 1.12;
 }
 
 #tun-armenian-assistant .taa-intro {
-  max-width: 720px;
-  margin: 8px 0 0;
+  max-width: 760px;
+  margin: 7px 0 0;
   color: var(--taa-muted);
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 #tun-armenian-assistant .taa-language-control {
@@ -190,10 +182,10 @@
   height: 44px;
   min-height: 44px;
   padding: 0 16px;
-  border: 1px solid var(--taa-accent);
+  border: 1px solid var(--taa-button);
   border-radius: 10px;
-  background: #fff;
-  color: #24586f;
+  background: var(--taa-button);
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
@@ -202,15 +194,16 @@
 }
 
 #tun-armenian-assistant .taa-reset:hover {
-  background: var(--taa-accent);
-  color: #111;
+  border-color: var(--taa-button-dark);
+  background: var(--taa-button-dark);
+  color: #fff;
 }
 
 #tun-armenian-assistant .taa-messages {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: 20px 24px;
+  padding: 18px 24px;
   background: #fff;
   scroll-behavior: smooth;
 }
@@ -243,12 +236,12 @@
 #tun-armenian-assistant .taa-message--user .taa-bubble {
   border-bottom-right-radius: 6px;
   background: var(--taa-user);
-  color: #111;
+  color: #fff;
 }
 
 #tun-armenian-assistant .taa-composer {
   flex: 0 0 auto;
-  padding: 12px 18px 14px;
+  padding: 10px 18px 12px;
   border-top: 1px solid var(--taa-line);
   background: var(--taa-bg);
 }
@@ -280,7 +273,7 @@
   justify-content: flex-end;
   align-items: center;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 8px;
   flex-wrap: wrap;
 }
 
@@ -292,7 +285,10 @@
   min-height: 42px;
   min-width: 140px;
   padding: 10px 14px;
+  border: 1px solid var(--taa-button);
   border-radius: 10px;
+  background: var(--taa-button);
+  color: #fff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -300,26 +296,11 @@
   line-height: 1.2;
 }
 
-#tun-armenian-assistant .taa-send {
-  border: 1px solid var(--taa-accent);
-  background: var(--taa-accent);
-  color: #111;
-}
-
-#tun-armenian-assistant .taa-send:hover {
-  border-color: var(--taa-accent-dark);
-  background: var(--taa-accent-dark);
-}
-
-#tun-armenian-assistant .taa-keyboard-toggle {
-  border: 1px solid var(--taa-line);
-  background: #fff;
-  color: var(--taa-text);
-}
-
+#tun-armenian-assistant .taa-send:hover,
 #tun-armenian-assistant .taa-keyboard-toggle:hover {
-  border-color: var(--taa-accent);
-  color: #24586f;
+  border-color: var(--taa-button-dark);
+  background: var(--taa-button-dark);
+  color: #fff;
 }
 
 #tun-armenian-assistant button:disabled,
@@ -331,32 +312,33 @@
 
 #tun-armenian-assistant .taa-keyboard {
   display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 10px;
-  padding: 12px;
+  grid-template-columns: repeat(13, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px;
   border: 1px solid var(--taa-line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: #fff;
 }
 
 #tun-armenian-assistant .taa-key {
-  min-height: 40px;
+  min-height: 34px;
+  padding: 4px 2px;
   border: 1px solid var(--taa-line);
-  border-radius: 9px;
+  border-radius: 8px;
   background: #fff;
   color: var(--taa-text);
-  font-size: 18px;
+  font-size: 17px;
   cursor: pointer;
 }
 
 #tun-armenian-assistant .taa-key:hover {
   border-color: var(--taa-accent);
-  color: #24586f;
+  color: var(--taa-accent);
 }
 
 #tun-armenian-assistant .taa-status {
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   color: var(--taa-muted);
   font-size: 12px;
 }
@@ -404,14 +386,14 @@
 }
 
 #tun-armenian-assistant :focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--taa-accent) 40%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--taa-accent) 25%, transparent);
   outline-offset: 2px;
 }
 
 @media (max-width: 900px) {
   #tun-armenian-assistant .taa-header {
     align-items: flex-start;
-    padding: 18px 18px 14px;
+    padding: 16px 18px 12px;
   }
 
   #tun-armenian-assistant .taa-header-actions {
@@ -423,8 +405,9 @@
     min-width: 160px;
   }
 
-  #tun-armenian-assistant .taa-messages { padding: 18px; }
-  #tun-armenian-assistant .taa-composer { padding: 12px 16px 14px; }
+  #tun-armenian-assistant .taa-keyboard { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+  #tun-armenian-assistant .taa-messages { padding: 16px 18px; }
+  #tun-armenian-assistant .taa-composer { padding: 10px 16px 12px; }
   #tun-armenian-assistant .taa-bubble { max-width: 90%; }
 }
 
@@ -434,7 +417,7 @@
   #tun-armenian-assistant .taa-header {
     flex-direction: column;
     align-items: stretch;
-    padding: 14px;
+    padding: 12px 14px;
   }
 
   #tun-armenian-assistant .taa-header-actions {
@@ -449,22 +432,22 @@
     min-width: 0;
   }
 
-  #tun-armenian-assistant .taa-title { font-size: 26px; }
-  #tun-armenian-assistant .taa-intro { font-size: 14px; }
-  #tun-armenian-assistant .taa-messages { padding: 16px 14px; }
+  #tun-armenian-assistant .taa-title { font-size: 24px; }
+  #tun-armenian-assistant .taa-intro { font-size: 13px; }
+  #tun-armenian-assistant .taa-messages { padding: 14px 12px; }
   #tun-armenian-assistant .taa-bubble { max-width: 100%; font-size: 14px; }
-  #tun-armenian-assistant .taa-composer { padding: 10px 12px 12px; }
+  #tun-armenian-assistant .taa-composer { padding: 8px 10px 10px; }
 
   #tun-armenian-assistant .taa-input {
-    min-height: 56px;
-    max-height: 88px;
+    min-height: 54px;
+    max-height: 82px;
     padding: 10px 12px;
     font-size: 14px;
   }
 
   #tun-armenian-assistant .taa-actions {
     justify-content: stretch;
-    margin-top: 8px;
+    margin-top: 7px;
   }
 
   #tun-armenian-assistant .taa-send,
@@ -474,16 +457,25 @@
     min-width: 0;
   }
 
-  #tun-armenian-assistant .taa-keyboard { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  #tun-armenian-assistant .taa-keyboard {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 5px;
+    padding: 7px;
+  }
+
+  #tun-armenian-assistant .taa-key {
+    min-height: 32px;
+    font-size: 16px;
+  }
 }
 </style>
 
 <script>
 window.TunArmenianAssistantConfig = Object.assign({
   apiUrl: 'https://isubcltyakhotesjifsw.supabase.co/functions/v1/armenian-chat',
-  title: 'Western Armenian Language Assistant',
-  intro: 'Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.',
-  accent: '#A6D7EB'
+  title: 'Need tutor help? Ask me anything',
+  intro: 'Ask questions, practice conversations, create personalised learning resources and get instant help with Eastern or Western Armenian, however you like to learn.',
+  accent: '#DB182B'
 }, window.TunArmenianAssistantConfig || {});
 </script>
 
@@ -556,16 +548,7 @@ if (root) {
   const languageSelect = root.querySelector('[data-taa-language]')
   const configWarning = root.querySelector('[data-taa-config-warning]')
 
-  root.style.setProperty('--taa-accent', config.accent || '#A6D7EB')
-
-  function syncViewportHeight() {
-    const viewportHeight = window.visualViewport?.height || window.innerHeight
-    const topOffset = root.getBoundingClientRect().top
-    const availableHeight = calculateAvailableViewportHeight(viewportHeight, topOffset)
-    if (availableHeight > 0) {
-      root.style.setProperty('--taa-viewport-height', `${availableHeight}px`)
-    }
-  }
+  root.style.setProperty('--taa-accent', config.accent || '#DB182B')
 
   const titleNode = root.querySelector('[data-taa-title]')
   const introNode = root.querySelector('[data-taa-intro]')
@@ -604,21 +587,12 @@ if (root) {
     return languageSelect?.value === 'hye' ? 'hye' : 'hyw'
   }
 
-  function languageCopy(language = getLanguage()) {
-    if (language === 'hye') {
-      return {
-        title: 'Eastern Armenian Language Assistant',
-        intro: 'Ask about Eastern Armenian vocabulary, grammar, phrases, spelling, and usage.',
-        placeholder: 'Ask an Eastern Armenian question...',
-        welcome: 'Բարեւ։ Ask me a question about Eastern Armenian.',
-      }
-    }
-
+  function languageCopy() {
     return {
-      title: config.title || 'Western Armenian Language Assistant',
-      intro: config.intro || 'Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.',
-      placeholder: 'Ask a Western Armenian question...',
-      welcome: 'Բարեւ։ Ask me a question about Western Armenian.',
+      title: config.title || 'Need tutor help? Ask me anything',
+      intro: config.intro || 'Ask questions, practice conversations, create personalised learning resources and get instant help with Eastern or Western Armenian, however you like to learn.',
+      placeholder: 'Ask me anything...',
+      welcome: 'Բարեւ։ Ask me a question about the Armenian language.',
     }
   }
 
@@ -796,10 +770,6 @@ if (root) {
       input.focus()
     }
   })
-
-  syncViewportHeight()
-  window.addEventListener('resize', syncViewportHeight)
-  window.visualViewport?.addEventListener('resize', syncViewportHeight)
 
   applyLanguageCopy()
   renderKeyboard()

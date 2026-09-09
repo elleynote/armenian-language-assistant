@@ -10,14 +10,13 @@ if (root) {
   const status = root.querySelector('[data-taa-status]')
   const keyboard = root.querySelector('[data-taa-keyboard]')
   const keyboardToggle = root.querySelector('[data-taa-keyboard-toggle]')
+  const languageSelect = root.querySelector('[data-taa-language]')
   const configWarning = root.querySelector('[data-taa-config-warning]')
 
-  root.style.setProperty('--taa-accent', config.accent || '#7f2d3f')
+  root.style.setProperty('--taa-accent', config.accent || '#DB182B')
 
   const titleNode = root.querySelector('[data-taa-title]')
   const introNode = root.querySelector('[data-taa-intro]')
-  if (titleNode && config.title) titleNode.textContent = config.title
-  if (introNode && config.intro) introNode.textContent = config.intro
 
   const apiReady = typeof config.apiUrl === 'string' && !config.apiUrl.includes('YOUR_PROJECT_REF')
   if (!apiReady) configWarning?.classList.remove('taa-hidden')
@@ -49,6 +48,35 @@ if (root) {
     localStorage.removeItem(STORAGE_KEYS.sessionId)
   }
 
+  function getLanguage() {
+    return languageSelect?.value === 'hye' ? 'hye' : 'hyw'
+  }
+
+  function languageCopy(language = getLanguage()) {
+    if (language === 'hye') {
+      return {
+        title: 'Eastern Armenian Language Assistant',
+        intro: 'Ask about Eastern Armenian vocabulary, grammar, phrases, spelling, and usage.',
+        placeholder: 'Ask an Eastern Armenian question...',
+        welcome: 'Բարեւ։ Ask me a question about Eastern Armenian.',
+      }
+    }
+
+    return {
+      title: config.title || 'Western Armenian Language Assistant',
+      intro: config.intro || 'Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.',
+      placeholder: 'Ask a Western Armenian question...',
+      welcome: 'Բարեւ։ Ask me a question about Western Armenian.',
+    }
+  }
+
+  function applyLanguageCopy() {
+    const copy = languageCopy()
+    if (titleNode) titleNode.textContent = copy.title
+    if (introNode) introNode.textContent = copy.intro
+    if (input) input.placeholder = copy.placeholder
+  }
+
   function setStatus(text = '') {
     if (status) status.textContent = text
   }
@@ -57,7 +85,7 @@ if (root) {
     messages.scrollTop = messages.scrollHeight
   }
 
-  function createMessage(role, text, source = '') {
+  function createMessage(role, text) {
     const wrapper = document.createElement('div')
     wrapper.className = `taa-message taa-message--${role}`
 
@@ -99,12 +127,14 @@ if (root) {
     if (input) input.disabled = isBusy
     if (keyboardToggle) keyboardToggle.disabled = isBusy
     if (resetButton) resetButton.disabled = isBusy
+    if (languageSelect) languageSelect.disabled = isBusy
   }
 
   function resetConversation() {
+    const copy = languageCopy()
     messages.innerHTML = `
       <div class="taa-message taa-message--assistant">
-        <div class="taa-bubble">Բարեւ։ Ask me a question about Western Armenian.</div>
+        <div class="taa-bubble" data-taa-welcome>${escapeHtml(copy.welcome)}</div>
       </div>
     `
     clearSessionId()
@@ -146,6 +176,7 @@ if (root) {
       message,
       clientId: getClientId(),
       sessionId: getSessionId(),
+      language: getLanguage(),
     })
 
     const response = await fetch(config.apiUrl, {
@@ -168,6 +199,11 @@ if (root) {
 
   keyboardToggle?.addEventListener('click', toggleKeyboard)
   resetButton?.addEventListener('click', resetConversation)
+  languageSelect?.addEventListener('change', () => {
+    applyLanguageCopy()
+    clearSessionId()
+    resetConversation()
+  })
 
   input?.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -197,7 +233,7 @@ if (root) {
     try {
       const data = await sendMessage(message)
       removeNode(typingNode)
-      createMessage('assistant', data.answer || 'No response received.', data.source || '')
+      createMessage('assistant', data.answer || 'No response received.')
       if (data.sessionId) setSessionId(data.sessionId)
     } catch (error) {
       removeNode(typingNode)
@@ -209,7 +245,7 @@ if (root) {
     }
   })
 
+  applyLanguageCopy()
   renderKeyboard()
   setStatus('')
 }
-

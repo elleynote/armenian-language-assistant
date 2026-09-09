@@ -48,3 +48,18 @@ test('Eastern answers are not processed by Western transliteration rules', () =>
     'Try Բարեւ.',
   )
 })
+test('Western Armenian suggestions transliterate all suggested words beyond four', () => {
+  const answer = [
+    'Here are 5 beginner Western Armenian food words:',
+    '- \u0570\u0561\u0581 \u2014 bread',
+    '- \u057B\u0578\u0582\u0580 \u2014 water',
+    '- \u057A\u0561\u0576\u056B\u0580 \u2014 cheese',
+    '- \u056D\u0576\u0571\u0578\u0580 \u2014 apple',
+    '- \u056F\u0561\u0569 \u2014 milk',
+  ].join('\n')
+
+  assert.equal(
+    appendWesternArmenianTransliterations(answer, 'hyw'),
+    `${answer}\n\nTransliteration: hats' / chur / banir / khntsor / gat'`,
+  )
+})

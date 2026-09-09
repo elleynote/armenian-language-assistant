@@ -38,3 +38,11 @@ export function insertAtSelection(value, insert, selectionStart, selectionEnd) {
   const nextValue = `${source.slice(0, start)}${text}${source.slice(end)}`
   return { value: nextValue, cursor: start + text.length }
 }
+
+export function calculateAvailableViewportHeight(viewportHeight, topOffset) {
+  const height = Number(viewportHeight)
+  const top = Number(topOffset)
+  if (!Number.isFinite(height) || height <= 0) return 0
+  if (!Number.isFinite(top) || top <= 0 || top >= height) return height
+  return Math.max(0, height - top)
+}

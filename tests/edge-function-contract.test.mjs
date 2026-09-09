@@ -61,6 +61,17 @@ test('system prompt distinguishes vo from o-letter transliteration', () => {
   assert.ok(source.includes(`The Armenian letters ${voLetter} and ${oLetter} are distinct. Never apply the ${voLetter} -> 'vo' rule to a word that begins with ${oLetter}.`))
 })
 
+test('Western pronunciation guidance explicitly follows Tun pronunciation mapping', () => {
+  assert.match(source, /բ[^\n]*pronounced[^\n]*p/i)
+  assert.match(source, /Western Armenian pronunciation/i)
+  assert.match(source, /same Tun.*transliteration|Tun.*pronunciation rules/i)
+})
+
+test('Western suggestions require transliteration for additional Armenian words and phrases', () => {
+  assert.match(source, /additional.*Western Armenian.*transliteration|suggest.*Western Armenian.*transliteration/is)
+  assert.match(source, /appendWesternArmenianTransliterations/)
+})
+
 test('chat function treats selected Armenian variety as an explicit request contract', () => {
   assert.match(source, /payload\.language/)
   assert.match(source, /language:\s*payload\.language/)

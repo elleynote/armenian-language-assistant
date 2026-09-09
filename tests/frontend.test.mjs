@@ -111,6 +111,15 @@ test('chatbot uses Tun branding and fits the remaining viewport without top padd
   assert.match(app, /--taa-viewport-height/)
 })
 
+test('composer is compact so the conversation area gets more space', async () => {
+  const html = await readFile(new URL('../frontend/template.html', import.meta.url), 'utf8')
+  const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
+  assert.doesNotMatch(html, /Press Enter to send/)
+  assert.match(html, /data-taa-input[\s\S]*?rows="2"/)
+  assert.match(css, /\.taa-input\s*\{[\s\S]*?min-height:\s*60px;/)
+  assert.match(css, /\.taa-status:empty\s*\{[\s\S]*?display:\s*none;/)
+})
+
 test('header centers and styles the new chat action', async () => {
   const css = await readFile(new URL('../frontend/styles.css', import.meta.url), 'utf8')
   assert.match(css, /\.taa-header\s*\{[\s\S]*?align-items:\s*center;/)

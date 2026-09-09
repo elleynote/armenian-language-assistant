@@ -56,14 +56,14 @@
 
 <style>
 #tun-armenian-assistant {
-  --taa-accent: #db182b;
-  --taa-accent-dark: #b81425;
-  --taa-bg: #fff8f8;
+  --taa-accent: #a6d7eb;
+  --taa-accent-dark: #7fbfd9;
+  --taa-bg: #f7fcfe;
   --taa-surface: #ffffff;
   --taa-text: #111111;
   --taa-muted: #666666;
-  --taa-line: #ece3e5;
-  --taa-user: #db182b;
+  --taa-line: #dcecf2;
+  --taa-user: #a6d7eb;
   --taa-assistant: #f8f8f8;
   width: 100%;
   max-width: 1120px;
@@ -193,7 +193,7 @@
   border: 1px solid var(--taa-accent);
   border-radius: 10px;
   background: #fff;
-  color: var(--taa-accent);
+  color: #24586f;
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
@@ -203,7 +203,7 @@
 
 #tun-armenian-assistant .taa-reset:hover {
   background: var(--taa-accent);
-  color: #fff;
+  color: #111;
 }
 
 #tun-armenian-assistant .taa-messages {
@@ -243,7 +243,7 @@
 #tun-armenian-assistant .taa-message--user .taa-bubble {
   border-bottom-right-radius: 6px;
   background: var(--taa-user);
-  color: #fff;
+  color: #111;
 }
 
 #tun-armenian-assistant .taa-composer {
@@ -303,7 +303,7 @@
 #tun-armenian-assistant .taa-send {
   border: 1px solid var(--taa-accent);
   background: var(--taa-accent);
-  color: #fff;
+  color: #111;
 }
 
 #tun-armenian-assistant .taa-send:hover {
@@ -319,7 +319,7 @@
 
 #tun-armenian-assistant .taa-keyboard-toggle:hover {
   border-color: var(--taa-accent);
-  color: var(--taa-accent);
+  color: #24586f;
 }
 
 #tun-armenian-assistant button:disabled,
@@ -352,7 +352,7 @@
 
 #tun-armenian-assistant .taa-key:hover {
   border-color: var(--taa-accent);
-  color: var(--taa-accent);
+  color: #24586f;
 }
 
 #tun-armenian-assistant .taa-status {
@@ -404,7 +404,7 @@
 }
 
 #tun-armenian-assistant :focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--taa-accent) 25%, transparent);
+  outline: 3px solid color-mix(in srgb, var(--taa-accent) 40%, transparent);
   outline-offset: 2px;
 }
 
@@ -483,7 +483,7 @@ window.TunArmenianAssistantConfig = Object.assign({
   apiUrl: 'https://isubcltyakhotesjifsw.supabase.co/functions/v1/armenian-chat',
   title: 'Western Armenian Language Assistant',
   intro: 'Ask about Western Armenian vocabulary, grammar, phrases, spelling, and usage.',
-  accent: '#DB182B'
+  accent: '#A6D7EB'
 }, window.TunArmenianAssistantConfig || {});
 </script>
 
@@ -520,6 +520,10 @@ export function escapeHtml(value) {
     .replaceAll("'", '&#039;')
 }
 
+export function renderAssistantText(value) {
+  return escapeHtml(value).replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+}
+
 export function insertAtSelection(value, insert, selectionStart, selectionEnd) {
   const source = String(value ?? '')
   const text = String(insert ?? '')
@@ -552,7 +556,7 @@ if (root) {
   const languageSelect = root.querySelector('[data-taa-language]')
   const configWarning = root.querySelector('[data-taa-config-warning]')
 
-  root.style.setProperty('--taa-accent', config.accent || '#DB182B')
+  root.style.setProperty('--taa-accent', config.accent || '#A6D7EB')
 
   function syncViewportHeight() {
     const viewportHeight = window.visualViewport?.height || window.innerHeight
@@ -639,7 +643,7 @@ if (root) {
 
     const bubble = document.createElement('div')
     bubble.className = 'taa-bubble'
-    bubble.innerHTML = escapeHtml(text)
+    bubble.innerHTML = role === 'assistant' ? renderAssistantText(text) : escapeHtml(text)
 
     wrapper.appendChild(bubble)
     messages.appendChild(wrapper)

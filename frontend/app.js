@@ -15,6 +15,15 @@ if (root) {
 
   root.style.setProperty('--taa-accent', config.accent || '#DB182B')
 
+  function syncViewportHeight() {
+    const viewportHeight = window.visualViewport?.height || window.innerHeight
+    const topOffset = root.getBoundingClientRect().top
+    const availableHeight = calculateAvailableViewportHeight(viewportHeight, topOffset)
+    if (availableHeight > 0) {
+      root.style.setProperty('--taa-viewport-height', `${availableHeight}px`)
+    }
+  }
+
   const titleNode = root.querySelector('[data-taa-title]')
   const introNode = root.querySelector('[data-taa-intro]')
 
@@ -244,6 +253,10 @@ if (root) {
       input.focus()
     }
   })
+
+  syncViewportHeight()
+  window.addEventListener('resize', syncViewportHeight)
+  window.visualViewport?.addEventListener('resize', syncViewportHeight)
 
   applyLanguageCopy()
   renderKeyboard()

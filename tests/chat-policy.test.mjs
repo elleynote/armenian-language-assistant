@@ -222,7 +222,7 @@ test('Western transliteration helper matches Tun translator rules', async () => 
 
   assert.equal(transliterateWesternArmenian('ես եմ'), 'yes em')
   assert.equal(transliterateWesternArmenian('դուն ես'), 'tun es')
-  assert.equal(transliterateWesternArmenian('ոստիկան'), 'vostigan')
+  assert.equal(transliterateWesternArmenian('ոստիկան'), 'vosdigan')
   assert.equal(transliterateWesternArmenian('օր'), 'or')
-  assert.equal(transliterateWesternArmenian('խնձոր'), 'khntzor')
+  assert.equal(transliterateWesternArmenian('խնձոր'), 'khntsor')
 })

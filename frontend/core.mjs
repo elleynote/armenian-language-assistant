@@ -30,6 +30,10 @@ export function escapeHtml(value) {
     .replaceAll("'", '&#039;')
 }
 
+export function renderAssistantText(value) {
+  return escapeHtml(value).replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+}
+
 export function insertAtSelection(value, insert, selectionStart, selectionEnd) {
   const source = String(value ?? '')
   const text = String(insert ?? '')

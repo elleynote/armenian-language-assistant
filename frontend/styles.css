@@ -1,12 +1,12 @@
 ﻿#tun-armenian-assistant {
-  --taa-accent: #db182b;
-  --taa-accent-dark: #b81425;
-  --taa-bg: #fff8f8;
+  --taa-accent: #a6d7eb;
+  --taa-accent-dark: #7fbfd9;
+  --taa-bg: #f7fcfe;
   --taa-surface: #ffffff;
   --taa-text: #111111;
   --taa-muted: #666666;
-  --taa-line: #ece3e5;
-  --taa-user: #db182b;
+  --taa-line: #dcecf2;
+  --taa-user: #a6d7eb;
   --taa-assistant: #f8f8f8;
   --taa-button: #1e78ce;
   --taa-button-dark: #1766b1;
@@ -126,10 +126,10 @@
   height: 44px;
   min-height: 44px;
   padding: 0 16px;
-  border: 1px solid var(--taa-button);
+  border: 1px solid var(--taa-accent);
   border-radius: 10px;
-  background: var(--taa-button);
-  color: #fff;
+  background: #fff;
+  color: #24586f;
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
@@ -138,9 +138,8 @@
 }
 
 #tun-armenian-assistant .taa-reset:hover {
-  border-color: var(--taa-button-dark);
-  background: var(--taa-button-dark);
-  color: #fff;
+  background: var(--taa-accent);
+  color: #111;
 }
 
 #tun-armenian-assistant .taa-messages {
@@ -180,7 +179,7 @@
 #tun-armenian-assistant .taa-message--user .taa-bubble {
   border-bottom-right-radius: 6px;
   background: var(--taa-user);
-  color: #fff;
+  color: #111;
 }
 
 #tun-armenian-assistant .taa-composer {
@@ -229,10 +228,7 @@
   min-height: 42px;
   min-width: 140px;
   padding: 10px 14px;
-  border: 1px solid var(--taa-button);
   border-radius: 10px;
-  background: var(--taa-button);
-  color: #fff;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -240,11 +236,27 @@
   line-height: 1.2;
 }
 
-#tun-armenian-assistant .taa-send:hover,
-#tun-armenian-assistant .taa-keyboard-toggle:hover {
+#tun-armenian-assistant .taa-send {
+  border: 1px solid var(--taa-button);
+  background: var(--taa-button);
+  color: #fff;
+}
+
+#tun-armenian-assistant .taa-send:hover {
   border-color: var(--taa-button-dark);
   background: var(--taa-button-dark);
   color: #fff;
+}
+
+#tun-armenian-assistant .taa-keyboard-toggle {
+  border: 1px solid var(--taa-line);
+  background: #fff;
+  color: var(--taa-text);
+}
+
+#tun-armenian-assistant .taa-keyboard-toggle:hover {
+  border-color: var(--taa-accent);
+  color: #24586f;
 }
 
 #tun-armenian-assistant button:disabled,

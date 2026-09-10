@@ -13,7 +13,7 @@ if (root) {
   const languageSelect = root.querySelector('[data-taa-language]')
   const configWarning = root.querySelector('[data-taa-config-warning]')
 
-  root.style.setProperty('--taa-accent', config.accent || '#DB182B')
+  root.style.setProperty('--taa-accent', config.accent || '#A6D7EB')
 
   const titleNode = root.querySelector('[data-taa-title]')
   const introNode = root.querySelector('[data-taa-intro]')
